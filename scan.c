@@ -8,7 +8,7 @@
 #include<stdio.h>
 #include<unistd.h>
 
-const char VERSIONSNR[] = "0.1.2";
+const char VERSIONSNR[] = "0.2.1";
 
 const int DB_SIZE = 20;
 
@@ -22,13 +22,15 @@ typedef struct person_t{
 void readcsv(char *datei)
 {
 	FILE *filepointer = NULL;
-	person_t database[DB_SIZE];
 	int zaehler = 0;
+   	char *file_contents;
+	//check for empty file
 	if(NULL == (filepointer = fopen(datei, "r")))
 	{
 		fprintf(stderr, "Couldnt open file '%s'\n", datei);
 		exit(2);
 	}
+	person_t database[DB_SIZE];
 	while((fscanf(filepointer, "%d,%[^,],%[^,],%d", &database[zaehler].personalnummer,
 			 database[zaehler].nachname, database[zaehler].vorname,
 			 &database[zaehler].geburtsjahr))!= EOF)
@@ -37,10 +39,12 @@ void readcsv(char *datei)
 			database[zaehler].nachname, database[zaehler].vorname,
 			database[zaehler].geburtsjahr);
 			zaehler++;
-		}
-	
-	
-
+		}	
+	if(fclose(filepointer) == EOF)
+	{
+		fprintf(stderr, "Fehler beim schließen der Datei! \n");
+		exit(2);
+	}
 }
 
 int main(int argc, char* argv[])
