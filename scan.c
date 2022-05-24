@@ -8,7 +8,7 @@
 #include<stdio.h>
 #include<unistd.h>
 
-const char VERSIONSNR[] = "0.2.1";
+const char VERSIONSNR[] = "0.1.2";
 
 const int DB_SIZE = 20;
 
@@ -23,7 +23,6 @@ void readcsv(char *datei)
 {
 	FILE *filepointer = NULL;
 	int zaehler = 0;
-   	char *file_contents;
 	//check for empty file
 	if(NULL == (filepointer = fopen(datei, "r")))
 	{
@@ -39,7 +38,8 @@ void readcsv(char *datei)
 			database[zaehler].nachname, database[zaehler].vorname,
 			database[zaehler].geburtsjahr);
 			zaehler++;
-		}	
+		}
+	//check if file closed correctly	
 	if(fclose(filepointer) == EOF)
 	{
 		fprintf(stderr, "Fehler beim schließen der Datei! \n");
