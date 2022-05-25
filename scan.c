@@ -8,39 +8,48 @@
 #include<stdio.h>
 #include<unistd.h>
 
-const char VERSIONSNR[] = "0.1.2";
+char const *const VERSIONSNR = "0.1.2";
 
-const int DB_SIZE = 20;
+int const DB_SIZE = 20;
 
-typedef struct person_t{
+struct person{
 	int personalnummer;
 	char nachname[20];
 	char vorname[20];
 	int geburtsjahr;
-} person_t;
+};
+typedef struct person person_t; 
 
-void readcsv(char *datei)
+void readcsv(char const *const datei)
 {
 	FILE *filepointer = NULL;
 	person_t database[DB_SIZE];
 	int zaehler = 0;
-	if(NULL == (filepointer = fopen(datei, "r")))
+
+	filepointer = fopen(datei ,"r");
+	if(NULL == filepointer)
 	{
 		fprintf(stderr, "Couldnt open file '%s'\n", datei);
 		exit(2);
 	}
-	while((fscanf(filepointer, "%d,%[^,],%[^,],%d", &database[zaehler].personalnummer,
+	while(fscanf(filepointer, "%d,%[^,],%[^,],%d", &database[zaehler].personalnummer,
 			 database[zaehler].nachname, database[zaehler].vorname,
-			 &database[zaehler].geburtsjahr))!= EOF)
+			 &database[zaehler].geburtsjahr) != EOF)
 		{		
 			printf("%d, %s, %s, %d \n", database[zaehler].personalnummer, 
 			database[zaehler].nachname, database[zaehler].vorname,
 			database[zaehler].geburtsjahr);
 			zaehler++;
+			if(zaehler == DB_SIZE)
+			{
+				fprintf(stderr, "Datenbank voll! \n");
+				break;
+			}
 		}
-	
-	
-
+	if(fclose(filepointer)== EOF)
+	{
+		fprintf(stderr,"Fehler beim schließen der Datei!");
+	}
 }
 
 int main(int argc, char* argv[])
@@ -50,10 +59,9 @@ int main(int argc, char* argv[])
 		fprintf(stderr, "No option recognized. Wrong Usage. Please try -h\n");
 	}
 	
-	int option;
-
-	while((option = getopt(argc, argv, "hvf:"))!=-1)
+	while(true)
 	{
+		int option = getopt(argc, argv, "hvf:");
 		switch(option)
 		{
 			case 'h':
@@ -68,6 +76,8 @@ int main(int argc, char* argv[])
 			case '?':
 				fprintf(stderr ,"Please try -h\n");
 				exit(1);
+			case -1:
+				break;
 		}
 	}
 
