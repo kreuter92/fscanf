@@ -23,7 +23,6 @@ typedef struct person person_t;
 void readcsv(char const *const datei)
 {
 	FILE *filepointer = NULL;
-	person_t database[DB_SIZE];
 	int zaehler = 0;
 
 	filepointer = fopen(datei ,"r");
@@ -32,6 +31,7 @@ void readcsv(char const *const datei)
 		fprintf(stderr, "Couldnt open file '%s'\n", datei);
 		exit(2);
 	}
+	person_t database[DB_SIZE];
 	while(fscanf(filepointer, "%d,%[^,],%[^,],%d", &database[zaehler].personalnummer,
 			 database[zaehler].nachname, database[zaehler].vorname,
 			 &database[zaehler].geburtsjahr) != EOF)
@@ -46,9 +46,11 @@ void readcsv(char const *const datei)
 				break;
 			}
 		}
-	if(fclose(filepointer)== EOF)
+	//check if file closed correctly	
+	if(fclose(filepointer) == EOF)
 	{
-		fprintf(stderr,"Fehler beim schließen der Datei!");
+		fprintf(stderr, "Fehler beim schließen der Datei! \n");
+		exit(2);
 	}
 }
 
