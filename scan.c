@@ -7,6 +7,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<unistd.h>
+#include<stdbool.h>
 
 char const *const VERSIONSNR = "0.1.2";
 
@@ -79,7 +80,7 @@ int main(int argc, char* argv[])
 				fprintf(stderr ,"Please try -h\n");
 				exit(1);
 			case -1:
-				break;
+				exit(0);
 		}
 	}
 
