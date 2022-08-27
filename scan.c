@@ -22,8 +22,6 @@ struct person
     char partner[30];
     char siblingName[30];
     char childName[30];
-    struct person sibling;
-    struct person child;
 };
 typedef struct person person_t;
 
